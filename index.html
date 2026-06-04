@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ترپەی دڵ - شیعری ئەشق و دڵشکاندن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-card: #15151a;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-red: #e11d48;
+            --accent-glow: rgba(225, 29, 72, 0.25);
+            --border-color: #272732;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Kufi Arabic', Tahoma, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 2;
+            min-height: 100vh;
+        }
+
+        /* بەشی سەرەوە (Header) */
+        header {
+            text-align: center;
+            padding: 4rem 2rem 5rem 2rem;
+            background: linear-gradient(to bottom, #16080c, var(--bg-dark));
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* لۆگۆی گەشەپێدەر */
+        .developer-badge {
+            display: inline-block;
+            background-color: rgba(225, 29, 72, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 15px var(--accent-glow);
+            letter-spacing: 0.5px;
+        }
+
+        .developer-badge span {
+            font-family: Arial, Helvetica, sans-serif; /* فۆنتی ئینگلیزی بۆ ناوەکە */
+            letter-spacing: 1px;
+            margin-right: 5px;
+            color: #ffffff;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 20px rgba(225, 29, 72, 0.6);
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+        }
+
+        /* بەشی گەڕان */
+        .search-container {
+            max-width: 650px;
+            margin: -30px auto 4rem auto;
+            position: relative;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 18px 30px;
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            font-size: 1.1rem;
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        #searchInput::placeholder {
+            color: #6b7280;
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 10px 35px var(--accent-glow);
+        }
+
+        /* تۆڕی کارتەکان (Grid) */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem 2rem;
+        }
+
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+            /* بۆ ئەوەی گۆڕانکارییەکان نەرم بن */
+            transition: all 0.4s ease;
+        }
+
+        /* کاریگەری Blur بۆ ئەو کارتانەی کە ماوسیان لەسەر نییە */
+        .quotes-grid:has(.quote-card:hover) .quote-card:not(:hover) {
+            filter: blur(4px);
+            opacity: 0.5;
+            transform: scale(0.96);
+        }
+
+        /* کارتی شیعرەکان */
+        .quote-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer; /* نیشانەی ماوس دەگۆڕێت بۆ دەست */
+        }
+
+        .quote-card::before {
+            content: '”';
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.02);
+            font-family: serif;
+            line-height: 1;
+            z-index: 0;
+            transition: color 0.4s ease;
+        }
+
+        /* کاتێک ماوس دەچێتە سەر کارتەکە، یان پەنجەی لێ دەدرێت لە مۆبایل */
+        .quote-card:hover {
+            transform: scale(1.06) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            border-color: var(--accent-red);
+            z-index: 10;
+        }
+
+        .quote-card:hover::before {
+            color: rgba(225, 29, 72, 0.08);
+        }
+
+        .quote-card:hover .author-name {
+            color: var(--accent-red);
+        }
+
+        .quote-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+            line-height: 2.2;
+            color: #e5e7eb;
+        }
+
+        .quote-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-name {
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: #d1d5db;
+            transition: color 0.3s ease;
+        }
+
+        .quote-year {
+            background-color: #272732;
+            padding: 5px 15px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* وەڵامدانەوە بۆ مۆبایل */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .quote-card { padding: 2rem 1.5rem; }
+            .quote-text { font-size: 1.15rem; line-height: 2; }
+            .search-container { padding: 0 15px; }
+            /* لە مۆبایلدا ڕەنگە نەمانەوێت زۆر بێتە پێشەوە بۆ ئەوەی شاشەکە تێکنەدات */
+            .quote-card:hover { transform: scale(1.02) translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="developer-badge">پەرەپێدراوە لەلایەن <span>MR.BAWAN</span></div>
+        <h1>ترپەی دڵ</h1>
+        <p>گەورەترین کۆکراوەی شیعر و وتەکانی ئەشق و دڵشکاندن</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="بگەڕێ بۆ شیعر، وشە، یان ناوی شاعیر...">
+    </div>
+
+    <div class="container">
+        <div class="quotes-grid" id="quotesGrid">
+            <!-- شیعرەکان لێرەدا دادەنرێن -->
+        </div>
+    </div>
+
+    <script>
+        // داتای ٧٥ شیعر و وتەی جوان
+        const quotes = [
+            { text: "کە دەڵێی ئەڕۆم، هەموو شتێک لەم شارەدا دەبێتە غەریبە، تەنانەت خۆشم.", author: "شێرکۆ بێکەس", year: "١٩٩٨" },
+            { text: "زولفت بە قەدتدا کە پەرێشان و بڵاوە، ئەمڕۆ لە منی خەستە دڵی ڕیشە چ داوە؟", author: "نالی", year: "١٨٤٠" },
+            { text: "دڵم هەر ئەو دڵەی جارانە ئێستاش، هەناسەم هەر وەکوو جارانە ئێستاش.", author: "مەحوی", year: "١٨٨٠" },
+            { text: "تۆ نەبی، کێیە لەم دنیا تاریکەدا چرای ڕۆحم بێت؟ بەبێ تۆ هەموو ڕۆژەکانم شەون.", author: "گۆران", year: "١٩٥٠" },
+            { text: "لە دووری تۆ، فرمێسکی چاوم بۆتە ڕووبار، ئەی ئەو کەسەی دڵت بردم و خۆت بوویتە بێگانە.", author: "هێمن موکریانی", year: "١٩٦٥" },
+            { text: "من کەسم نییە لەم شارەدا، تەنها تۆ نەبێت، تۆش کە ڕۆیشتی من بووم بە هیچ.", author: "عەبدوڵڵا پەشێو", year: "٢٠٠١" },
+            { text: "مرۆڤ کە دڵی شکا، چیتر ناتوانێت وەک جاران بفڕێت، باڵەکانی هەمیشە بریندارن.", author: "بەختیار عەلی", year: "٢٠١٠" },
+            { text: "ئەو شەوەی جێت هێشتم، تەنانەت مانگیش لە ئاسماندا ڕووی خۆی شارداوە و گریا.", author: "شێرکۆ بێکەس", year: "٢٠٠٥" },
+            { text: "ئەگەر بێیتەوە، هەموو شەقامەکانی ئەم شارە دەکەم بە گوڵ و چاوەڕێی هەنگاوەکانت دەکەم.", author: "قوبادی جەلیزادە", year: "٢٠١٥" },
+            { text: "لە بیرم دێ، کە جێتهێشتم پاییز بوو، گەڵاکان وەرین و دڵی منیش لەگەڵیاندا کەوت.", author: "عەبدوڵڵا پەشێو", year: "١٩٩٥" },
+            { text: "سەختترین ئازار ئەوەیە، کەسێک کە گەورەترین پێکەنینی پێبەخشیت، ببێتە هۆکاری درێژترین گریانەکەت.", author: "وتەی دڵشکاندن", year: "٢٠٢٢" },
+            { text: "تا دڵ نەسووتێ لە ئاگری ئەشقدا، چاوی من کەی ئەڕژێنێ ئەشکی سوور؟", author: "نالی", year: "١٨٤٢" },
+            { text: "ئەی دڵەی پڕ دەرد! تا کەی بناڵم بۆ وەسڵی یارت؟ کەی دەبێتە ڕۆژی ڕووناکیم؟", author: "مەولەوی", year: "١٨٦٠" },
+            { text: "وەک گەڵایەکی وشک کەوتمە ژێر پێت، کەچی تۆ بەبێ باکانە تێپەڕیت و ئاوڕت نەدایەوە.", author: "ڕەنج سەنگاوی", year: "٢٠١٨" },
+            { text: "لە سووتانی دڵم پرسی، وتی پەروانە دەزانێت کە چۆن خۆی بەخت دەکات بۆ ڕووناکی.", author: "مەحوی", year: "١٨٨٥" },
+            { text: "هەموو شتێک لەم ژیانەدا کۆتایی دێت، جگە لەو ئازارەی کە لە دوای ڕۆیشتنت جێت هێشت.", author: "فەرەیدوون عەبدولبەرزنجی", year: "٢٠٠٨" },
+            { text: "دڵشکاندن وەک شکاندنی ئاوێنە وایە، چەند هەوڵبدەیت چاکی بکەیتەوە، هێشتا درزەکانی دیارە.", author: "وتەی ئەشق", year: "٢٠٢٣" },
+            { text: "لە دووری تۆ، هەموو ساتێک ساڵێکە، وە هەموو ساڵێکیش سەدەیەکە لە ئازار.", author: "ئەحمەد هەردی", year: "١٩٧٠" },
+            { text: "خۆشەویستی ڕاستەقینە هەرگیز نامرێت، بەڵکو لە سووچێکی تاریکی دڵدا دەبێتە برینێکی هەمیشەیی.", author: "وتەی کوردی", year: "٢٠٢١" },
+            { text: "ئەو ڕۆژەی تۆ ڕۆیشتی، نیوەی تەمەنم لەگەڵ خۆت برد، نیوەکەی تریش لە چاوەڕوانیتدا پیر بوو.", author: "نەناسراو", year: "٢٠٢٠" },
+            { text: "شەو نییە خەیاڵی تۆ میوانی دڵم نەبێت، ڕۆژ نییە ناوی تۆ لەسەر زارم نەبێت.", author: "پیرەمێرد", year: "١٩٣٥" },
+            { text: "بە جۆرێک دڵم شکاوە، وەک ئەوەی قەدەر تەنها بۆ ئازاردانی من نووسرابێت.", author: "شێرکۆ بێکەس", year: "٢٠٠٦" },
+            { text: "ئەو کەسەی ڕۆیشت، با بڕوات! دڵی من گۆڕستان نییە بۆ کەسانی مردوو.", author: "بەختیار عەلی", year: "٢٠١٢" },
+            { text: "ئاشق بوون ئاسانە، بەڵام هێشتنەوەی ئەشق لە دڵێکی شکاوەدا، کاری پاڵەوانەکانە.", author: "عەبدوڵڵا پەشێو", year: "٢٠٠٣" },
+            { text: "تۆ ڕۆیشتی و من مامەوە، لەگەڵ کۆمەڵێک بیرەوەری کە وەک چەقۆ دڵم دەبڕن.", author: "ڕەنج سەنگاوی", year: "٢٠١٩" },
+            { text: "وتیان کات برینەکان ساڕێژ دەکات، بەڵام نەیانوت کات یادگارییەکان زیندووتر دەکاتەوە.", author: "وتەی دڵشکاندن", year: "٢٠٢٤" },
+            { text: "ئەگەر دڵت نەدەویستم، بۆچی فێری فڕینت کردم؟ بۆچی لە نیوەی ڕێگا باڵەکانت شکاندم؟", author: "نەناسراو", year: "٢٠١٧" },
+            { text: "من لە دوای تۆ، تەنانەت لەگەڵ سێبەرەکەی خۆشمدا قسە ناکەم، نەوەک ئەویش جێم بهێڵێت.", author: "قوبادی جەلیزادە", year: "٢٠١٤" },
+            { text: "بەهار هات و تۆ نەهاتی، گوڵ پشکوت و دڵی من هەر لە پاییزدا مایەوە.", author: "گۆران", year: "١٩٥٢" },
+            { text: "ئەی یاری بێوەفا، تا کەی لەسەر بەڵێنی درۆ چاوەڕێم بکەیت؟", author: "نالی", year: "١٨٤٥" },
+            { text: "ئەو دڵەی جێت هێشت، ئێستا پڕە لە تۆ، بەڵام خاڵییە لە ژیان.", author: "شێرکۆ بێکەس", year: "٢٠٠٢" },
+            { text: "لە کۆتاییدا تێگەیشتم، هەندێک کەس تەنها وەک وانەیەک دێنە ژیانمانەوە، نەک وەک چارەنووس.", author: "بەختیار عەلی", year: "٢٠١٦" },
+            { text: "بۆچی هێندە بە ئاسانی دەستبەردارم بوویت؟ مەگەر من ئەو کەسە نەبووم کە دەیگوت ژیانم فیدات؟", author: "عەبدوڵڵا پەشێو", year: "١٩٩٩" },
+            { text: "گریان بۆ کەسێک کە قەدری نازانێت، وەک ئاو دانە بە گوڵێکی پلاستیکی.", author: "وتەی کوردی", year: "٢٠٢٣" },
+            { text: "من ئازارەکانم لەناو پێکەنینەکانمدا شاردۆتەوە، با کەس نەزانێت چەندە وێرانم.", author: "نەناسراو", year: "٢٠٢١" },
+            { text: "چاوەکانت جوانترین درۆی ژیانم بوون، کە هەمیشە دەمویست باوەڕیان پێ بکەم.", author: "ڕەنج سەنگاوی", year: "٢٠٢٠" },
+            { text: "تاکە شتێک کە لێی پەشیمانم، پێدانی دڵم بوو بە کەسێک کە دڵی نەبوو.", author: "وتەی دڵشکاندن", year: "٢٠٢٢" },
+            { text: "عەشق وەک باران وایە، سەرەتا هەموو شتێک جوان دەکات، دواتریش لافاو دروست دەکات و هەمووی دەبات.", author: "قوبادی جەلیزادە", year: "٢٠١١" },
+            { text: "من تۆم ویست بۆ ئەوەی ببیتە هێزم، نەک ببیتە گەورەترین لاوازیم.", author: "شێرکۆ بێکەس", year: "٢٠٠٨" },
+            { text: "ئەگەر زانیت کەسێک بەڕاستی خۆشی دەوێیت، هەرگیز تاقیکردنەوەی لەگەڵ مەکە.", author: "بەختیار عەلی", year: "٢٠١٣" },
+            { text: "شەوانە کە دەخەوم، هیوادارم بەیانی خەبەرم نەبێتەوە، چونکە ژیان بێ تۆ تەنها سزایە.", author: "هێمن", year: "١٩٦٨" },
+            { text: "ئەو قسانەی لە کاتی توڕەییدا پێت وتم، زۆر لەو قسانە ڕاستتر بوون کە لە کاتی ئارامیدا دەتوتن.", author: "نەناسراو", year: "٢٠١٩" },
+            { text: "خۆزگە دەمتوانی بگەڕێمەوە بۆ ئەو ڕۆژەی کە یەکەم جار بینیمیت، وە ڕێگاکەم بگۆڕم.", author: "وتەی کوردی", year: "٢٠٢٤" },
+            { text: "ئازارەکە ئەوە نییە کە جێت هێشتم، ئازارەکە ئەوەیە کە پێت وتم هەرگیز جێت ناهێڵم.", author: "عەبدوڵڵا پەشێو", year: "٢٠٠٥" },
+            { text: "دڵم وەکوو شوشەیەک شکا، هەر پارچەیەکی ناوی تۆی لەسەر نووسرابوو.", author: "ڕەنج سەنگاوی", year: "٢٠١٧" },
+            { text: "کەسێک کە بە ئاسانی لەبیرت دەکات، هەرگیز لە سەرەتادا بەڕاستی خۆشی نەویستووی.", author: "وتەی دڵشکاندن", year: "٢٠٢٠" },
+            { text: "ئەشق واتە خۆت بسووتێنیت بۆ کەسێک کە تەنانەت هەست بە گەرمییەکەشت ناکات.", author: "بەختیار عەلی", year: "٢٠٠٩" },
+            { text: "من هەمیشە لێرەم بۆ تۆ، تەنانەت ئەگەر تۆش هەرگیز لێرە نەبیت بۆ من.", author: "نەناسراو", year: "٢٠٢١" },
+            { text: "هەندێک جار دەبێت قبوڵی بکەین کە هەندێک کەس لە دڵماندا دەمێننەوە، نەک لە ژیانماندا.", author: "قوبادی جەلیزادە", year: "٢٠١٨" },
+            { text: "ئەو یادگارییانەی کە جاران دەمخستنە پێکەنین، ئێستا دەمخەنە گریان.", author: "شێرکۆ بێکەس", year: "٢٠٠١" },
+            { text: "چیتر چاوەڕێی گەڕانەوەت نیم، چونکە ئەو کەسەی دەگەڕێتەوە، ئەو کەسە نییە کە ڕۆیشت.", author: "عەبدوڵڵا پەشێو", year: "٢٠٠٧" },
+            { text: "گەورەترین هەڵەی ژیانم ئەوە بوو، گرنگیم بە کەسێک دا کە گرنگی بە هەمووان دەدا جگە لە من.", author: "وتەی دڵشکاندن", year: "٢٠٢٣" },
+            { text: "من لە چاوەڕوانی تۆدا، تەنانەت کاتیشم لەبیر کرد، بەڵام تۆ لە کاتەکانتدا منت لەبیر کرد.", author: "ڕەنج سەنگاوی", year: "٢٠١٦" },
+            { text: "هێشتاش هەر تۆی تەنها هیوای دڵی من، هەرچەندە دەزانم بوونت خەیاڵە.", author: "مەحوی", year: "١٨٨٣" },
+            { text: "ئەگەر بێدەنگیم هەڵبژارد، مانای ئەوە نییە ئازارم نییە، بەڵکو دەزانم قسەکردن هیچ ناگۆڕێت.", author: "بەختیار عەلی", year: "٢٠١٥" },
+            { text: "تۆ فێرت کردم چۆن ئاشق بم، بەڵام فێرت نەکردم چۆن بێ تۆ بژیم.", author: "نەناسراو", year: "٢٠١٨" },
+            { text: "خۆشەویستی وەک سێبەر وایە، کە بەدوایدا ڕادەکەیت لێت دوور دەکەوێتەوە.", author: "پیرەمێرد", year: "١٩٤٠" },
+            { text: "کە دڵ شکا، ئیتر وشەی 'ببورە' وەک چەسپاندنی گەڵایەکی وشکە بە درەختێکەوە.", author: "وتەی کوردی", year: "٢٠٢٢" },
+            { text: "دوورکەوتنەوە باشترین چارەسەرە، کاتێک دەزانیت بوونت هیچ بەهایەکی نەماوە.", author: "قوبادی جەلیزادە", year: "٢٠١٩" },
+            { text: "من دەتوانم لە هەموو شتێک ببورم، جگە لەو کاتانەی کە پێویستم پێت بوو و تۆ جێت هێشتم.", author: "شێرکۆ بێکەس", year: "٢٠١١" },
+            { text: "ژیان بەردەوامە، بەڵام بەبێ تۆ، ڕەنگەکانی ژیانم بوون بە ڕەش و سپی.", author: "عەبدوڵڵا پەشێو", year: "٢٠١٠" },
+            { text: "ئەگەر ڕۆژێک گەڕایتەوە و منت نەدۆزییەوە، بزانە کە زۆر چاوەڕێم کردیت.", author: "نەناسراو", year: "٢٠٢٠" },
+            { text: "ئەو چاوانەی کە زۆرترین درۆیان پێ کردم، هەر ئەوانە بوون کە زۆرترین متمانەم پێیان بوو.", author: "ڕەنج سەنگاوی", year: "٢٠٢١" },
+            { text: "هەندێک برین هەن خوێنیان نییە، بەڵام هەموو شەوێک ڕۆحت دەخۆن.", author: "بەختیار عەلی", year: "٢٠١٧" },
+            { text: "تۆ ڕۆیشتیت و باست نەکرد، من مامەوە و بۆم نەوترا.", author: "وتەی دڵشکاندن", year: "٢٠٢٤" },
+            { text: "لە دوای تۆ، دەرگای دڵم داخست، نەوەک کەسێکی تر بێت و وێرانترمی بکات.", author: "قوبادی جەلیزادە", year: "٢٠٢٢" },
+            { text: "تاکە شتێک کە هێشتا دەمبەستێتەوە بە تۆوە، ئەو یادگارییانەن کە لەگەڵتدا دروستم کردن.", author: "شێرکۆ بێکەس", year: "٢٠١٣" },
+            { text: "من هەمیشە وتم باشم، لە کاتێکدا لە ناوەوە دەسووتام.", author: "عەبدوڵڵا پەشێو", year: "٢٠١٢" },
+            { text: "ئەگەر خۆشەویستی واتە ئازار، ئەوا من پڕ ئازارترین مرۆڤی سەر زەویم.", author: "نەناسراو", year: "٢٠٢٣" },
+            { text: "مرۆڤەکان ناگۆڕێن، تەنها ماسکەکانیان دەکەوێت.", author: "بەختیار عەلی", year: "٢٠١٨" },
+            { text: "ئەوەی زۆر گرنگیت پێدا، یەکەم کەس دەبێت کە دەستبەردارت دەبێت.", author: "وتەی کوردی", year: "٢٠٢١" },
+            { text: "باوەڕم بە هیچ شتێک نەماوە، تەنانەت ئەو قسانەشی کە دەڵێن 'هەموو شتێک باش دەبێت'.", author: "ڕەنج سەنگاوی", year: "٢٠٢٣" },
+            { text: "تۆ تەنها دڵت نەشکاندم، تۆ باوەڕم بە خۆشەویستی و مرۆڤەکانیش شکاند.", author: "نەناسراو", year: "٢٠٢٤" },
+            { text: "چیتر بۆت ناگریم، نەک لەبەر ئەوەی ئازارم نییە، بەڵکو فرمێسکەکانم وشکیان کرد.", author: "قوبادی جەلیزادە", year: "٢٠٢٠" },
+            { text: "تۆ خەونێک بوویت، کە هەرگیز نەدەبوو خەبەرم ببێتەوە.", author: "شێرکۆ بێکەس", year: "٢٠١٤" }
+        ];
+
+        const quotesGrid = document.getElementById('quotesGrid');
+        const searchInput = document.getElementById('searchInput');
+
+        // فەنکشنی پیشاندانی شیعرەکان
+        function displayQuotes(quotesArray) {
+            quotesGrid.innerHTML = ''; 
+            
+            if (quotesArray.length === 0) {
+                quotesGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); font-size: 1.2rem; padding: 2rem;">ببورە، هیچ شیعر و وتەیەک نەدۆزرایەوە!</p>';
+                return;
+            }
+
+            quotesArray.forEach(quote => {
+                const quoteCard = document.createElement('div');
+                quoteCard.className = 'quote-card';
+                // زیادکردنی تایبەتمەندی tabindex بۆ ئەوەی لە مۆبایلیشدا کاردانەوەی باشتر بێت
+                quoteCard.setAttribute('tabindex', '0'); 
+                
+                quoteCard.innerHTML = `
+                    <div class="quote-text">${quote.text}</div>
+                    <div class="quote-footer">
+                        <span class="author-name">${quote.author}</span>
+                        <span class="quote-year">${quote.year}</span>
+                    </div>
+                `;
+                
+                quotesGrid.appendChild(quoteCard);
+            });
+        }
+
+        // پیشاندانی هەموو شیعرەکان سەرەتا
+        displayQuotes(quotes);
+
+        // سیستەمی گەڕان
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim();
+            
+            const filteredQuotes = quotes.filter(quote => 
+                quote.text.includes(searchTerm) || 
+                quote.author.includes(searchTerm) ||
+                quote.year.includes(searchTerm)
+            );
+            
+            displayQuotes(filteredQuotes);
+        });
+    </script>
+</body>
+</html>

@@ -143,12 +143,26 @@
             transition: all 0.4s ease;
         }
 
-        /* کاریگەری Blur بۆ ئەو کارتانەی کە ماوسیان لەسەر نییە */
-        .quotes-grid:has(.quote-card:hover) .quote-card:not(:hover) {
-            filter: blur(4px);
-            opacity: 0.5;
-            transform: scale(0.96);
-        }
+       /* بۆ کۆمپیوتەر: کاریگەری Blur تەنها بە ماوس کار دەکات */
+@media (hover: hover) {
+    .quotes-grid:has(.quote-card:hover) .quote-card:not(:hover) {
+        filter: blur(4px);
+        opacity: 0.5;
+        transform: scale(0.96);
+    }
+}
+
+/* بۆ مۆبایل: کاتێک بە پەنجە کلیک لە کارتێک دەکرێت */
+.quotes-grid.has-active .quote-card:not(.active) {
+    filter: blur(4px);
+    opacity: 0.5;
+    transform: scale(0.96);
+}
+.quote-card.active {
+    transform: scale(1.02) translateY(-5px);
+    border-color: var(--accent-red);
+    z-index: 10;
+}
 
         /* کارتی شیعرەکان */
         .quote-card {
@@ -358,15 +372,31 @@
                 // زیادکردنی تایبەتمەندی tabindex بۆ ئەوەی لە مۆبایلیشدا کاردانەوەی باشتر بێت
                 quoteCard.setAttribute('tabindex', '0'); 
                 
-                quoteCard.innerHTML = `
-                    <div class="quote-text">${quote.text}</div>
-                    <div class="quote-footer">
-                        <span class="author-name">${quote.author}</span>
-                        <span class="quote-year">${quote.year}</span>
-                    </div>
-                `;
-                
-                quotesGrid.appendChild(quoteCard);
+            quoteCard.innerHTML = `
+                <div class="quote-text">${quote.text}</div>
+                <div class="quote-footer">
+                    <span class="author-name">${quote.author}</span>
+                    <span class="quote-year">${quote.year}</span>
+                </div>
+            `;
+            
+            // 🔽 ئەم کۆدەی خوارەوە لێرە زیاد بکە 🔽
+            quoteCard.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    const isActive = this.classList.contains('active');
+                    
+                    document.querySelectorAll('.quote-card').forEach(c => c.classList.remove('active'));
+                    quotesGrid.classList.remove('has-active');
+                    
+                    if (!isActive) {
+                        this.classList.add('active');
+                        quotesGrid.classList.add('has-active');
+                    }
+                }
+            });
+            // 🔼 کۆتایی کۆدی زیادکراو 🔼
+
+            quotesGrid.appendChild(quoteCard);
             });
         }
 
